@@ -15,10 +15,12 @@ The logger child class must be instantiated instead of the original class.
 Per default the logging messages will be displayed on the standard output. An output stream can be set to log the messages in a specific logging system.
 
 Logging message for:
+
 * Function entry with argument values
 * Function exit with return value
 * Function throw with exception type and message
 
-Restrictions: 
+Restrictions:
+
 * Only virtual functions can be logged
 * Constructor and destructor cannot be logged (functions called inside constructor or destructor will be logged)
