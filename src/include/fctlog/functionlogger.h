@@ -10,6 +10,12 @@
 #include "fctlog/define.h"
 
 namespace fctlog {
+
+static std::ostream output(std::cout.rdbuf());
+void setOuput(const std::ostream &stream) {
+  output.rdbuf(stream.rdbuf());
+}
+
 template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
   typedef typename std::function<Tret()> Tfct;
@@ -90,4 +96,5 @@ public:
     }
   }
 };
+
 } // namespace fctlog
