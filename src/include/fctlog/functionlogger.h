@@ -10,8 +10,9 @@
 #include "fctlog/define.h"
 
 namespace fctlog {
-template <typename Tfct, typename... Targs> class FunctionLoggerBase {
+template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
+  typedef typename std::function<Tret()> Tfct;
   FunctionLoggerBase(const std::string &name, Tfct fct, Targs... args)
       : function(fct), name(name) {
     std::cout << ">> " << name << " " << getEntryMsg(args...) << "\n";
@@ -45,22 +46,23 @@ private:
 
 template <typename Tret, typename... Targs>
 class FunctionLogger
-    : public FunctionLoggerBase<std::function<Tret()>, Targs...> {
+    : public FunctionLoggerBase<Tret, Targs...> {
+  typedef typename FunctionLoggerBase<Tret, Targs...>::Tfct Tfct;
+
 public:
-  typedef std::function<Tret()> Tfct;
   FunctionLogger(const std::string &name, Tfct fct, Targs... args)
-      : FunctionLoggerBase<Tfct, Targs...>(name, fct, args...) {}
+      : FunctionLoggerBase<Tret, Targs...>(name, fct, args...) {}
 
   Tret operator()() {
     std::stringstream s;
     try {
-      auto ret = FunctionLoggerBase<Tfct, Targs...>::function();
+      auto ret = this->function();
       s << "return: " << ret;
-      FunctionLoggerBase<Tfct, Targs...>::setExitMsg(s.str());
+      this->setExitMsg(s.str());
       return ret;
     } catch (std::exception &e) {
       s << "throw: " << typeid(e).name() << " '" << e.what() << "'";
-      FunctionLoggerBase<Tfct, Targs...>::setExitMsg(s.str());
+      this->setExitMsg(s.str());
       throw;
     }
   }
@@ -68,21 +70,22 @@ public:
 
 template <typename... Targs>
 class FunctionLogger<void, Targs...>
-    : public FunctionLoggerBase<std::function<void(Targs...)>, Targs...> {
+    : public FunctionLoggerBase<void, Targs...> {
+  typedef typename FunctionLoggerBase<void, Targs...>::Tfct Tfct;
+
 public:
-  typedef std::function<void(Targs...)> Tfct;
   FunctionLogger(const std::string &name, Tfct fct, Targs... args)
-      : FunctionLoggerBase<Tfct, Targs...>(name, fct, args...) {}
+      : FunctionLoggerBase<void, Targs...>(name, fct, args...) {}
 
   void operator()() {
     std::stringstream s;
     try {
-      FunctionLoggerBase<Tfct, Targs...>::function();
-      FunctionLoggerBase<Tfct, Targs...>::setExitMsg("return");
+      this->function();
+      this->setExitMsg("return");
       return;
     } catch (std::exception &e) {
       s << "throw: " << typeid(e).name() << " '" << e.what() << "'";
-      FunctionLoggerBase<Tfct, Targs...>::setExitMsg(s.str());
+      this->setExitMsg(s.str());
       throw;
     }
   }
