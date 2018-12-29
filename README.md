@@ -6,7 +6,7 @@ If it isn't possible to use a debuger, this tool will be very helpfull.
 
 No need to modify the original class. 
 A child class for logging purpose must be created. 
-Macros are provided for easy use.
+Macros are provided for easy use. Macros defined for method with up to 8 arguments (more macros can be define).
 Example:
 ```c++
 class DemoWithLog : public Demo {
