@@ -9,11 +9,12 @@ A child class for logging purpose must be created.
 Macros are provided for easy use.
 ```c++
 class DemoWithLog : public Demo {
-    FCTLOG_METHOD0(void, fct);
-    FCTLOG_METHOD1(int, fct, (int val = 0), val);
+    FCTLOG_METHOD0(void, fctName);
+    FCTLOG_METHOD1(int, fctName, (int val = 0), val);
 };
 ```
 The logger child class must be instantiated instead of the original class.
+See 'demo' for more details.
 
 Per default the logging messages will be displayed on the standard output. 
 An output stream can be set to log the messages in a specific logging system.
@@ -26,5 +27,6 @@ Logging message for:
 
 Restrictions:
 
-* Only virtual functions can be logged
+* Only virtual functions can be logged (workaround: make function to log virtual)
+* Private functions cannot be logged (workaround: change accessibility to protected)
 * Constructor and destructor cannot be logged (functions called inside constructor or destructor will be logged)
