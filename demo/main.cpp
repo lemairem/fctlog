@@ -11,6 +11,7 @@ int main() {
   using namespace fctlog;
   std::ostringstream myLogSystem;
   Outputter::set(myLogSystem);
+
   try {
 #ifdef FCTLOG_ENABLE
     DemoLog intance;
@@ -28,6 +29,7 @@ int main() {
   } catch (std::exception &e) {
     std::cout << e.what() << "\n";
   }
-  std::cout << "myLogSystem content: " << myLogSystem.str() << "\n";
+  
+  std::cout << "myLogSystem content: \n" << myLogSystem.str() << "\n";
 }
 #undef FCTLOG_ENABLE
