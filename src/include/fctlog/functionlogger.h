@@ -2,12 +2,12 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
+#include "fctlog/define.h"
+#include "fctlog/outputter.h"
 #include <functional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include "fctlog/define.h"
-#include "fctlog/outputter.h"
 
 namespace fctlog {
 
@@ -31,7 +31,7 @@ private:
   std::string name;
   std::string exitMsg;
   void getEntryMsgInternal(std::stringstream &s) {
-    if(s.str().empty()) {
+    if (s.str().empty()) {
       s << "no_args";
     }
   }
@@ -50,8 +50,7 @@ private:
 };
 
 template <typename Tret, typename... Targs>
-class FunctionLogger
-    : public FunctionLoggerBase<Tret, Targs...> {
+class FunctionLogger : public FunctionLoggerBase<Tret, Targs...> {
   typedef typename FunctionLoggerBase<Tret, Targs...>::Tfct Tfct;
 
 public:
