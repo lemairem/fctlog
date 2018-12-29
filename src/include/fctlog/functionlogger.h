@@ -16,11 +16,11 @@ public:
   typedef typename std::function<Tret()> Tfct;
   FunctionLoggerBase(const std::string &name, Tfct fct, Targs... args)
       : function(fct), name(name) {
-    std::cout << ">> " << name << " " << getEntryMsg(args...) << "\n";
+    Outputter::get() << ">> " << name << " " << getEntryMsg(args...) << "\n";
   }
 
   ~FunctionLoggerBase() {
-    std::cout << "<< " << name << " " << exitMsg << "\n";
+    Outputter::get() << "<< " << name << " " << exitMsg << "\n";
   }
 
 protected:
@@ -30,7 +30,11 @@ protected:
 private:
   std::string name;
   std::string exitMsg;
-  void getEntryMsgInternal(std::stringstream &) {}
+  void getEntryMsgInternal(std::stringstream &s) {
+    if(s.str().empty()) {
+      s << "no_args";
+    }
+  }
 
   template <typename T, typename... Ts>
   void getEntryMsgInternal(std::stringstream &s, T arg, Ts... args) {
