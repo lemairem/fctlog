@@ -3,18 +3,13 @@
 
 #pragma once
 #include <functional>
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include "fctlog/define.h"
+#include "fctlog/outputter.h"
 
 namespace fctlog {
-
-static std::ostream output(std::cout.rdbuf());
-void setOuput(const std::ostream &stream) {
-  output.rdbuf(stream.rdbuf());
-}
 
 template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
