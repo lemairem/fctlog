@@ -4,5 +4,6 @@ executable(
         'main.cpp'
         , 'demo.cpp'
     ],
-    dependencies: fctlog_dep
+    dependencies: fctlog_dep,
+    cpp_args : '-DFCTLOG_ENABLE'
 )

@@ -6,11 +6,10 @@
 #include <iostream>
 #include <stdexcept>
 
-#define FCTLOG_ENABLE
 int main() {
   using namespace fctlog;
-  std::ostringstream myLogSystem;
-  Outputter::set(myLogSystem);
+  std::ostringstream myLogging;
+  Outputter::set(myLogging);
 
   try {
 #ifdef FCTLOG_ENABLE
@@ -30,6 +29,5 @@ int main() {
     std::cout << e.what() << "\n";
   }
   
-  std::cout << "myLogSystem content: \n" << myLogSystem.str() << "\n";
+  std::cout << "\nmyLogSystem content: \n" << myLogging.str() << "\n";
 }
-#undef FCTLOG_ENABLE
