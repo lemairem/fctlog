@@ -20,8 +20,10 @@ int main() {
     Demo &ref = intance;
     ref.fv();
     ref.f0();
+    ref.f0Const();
     ref.f1(1);
     ref.f2();
+    ref.f2Const(1, 2);
     ref.f2(1, "Hello");
     ref.f2(123, "World");
     ref.f2();

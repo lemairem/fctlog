@@ -12,6 +12,8 @@ void Demo::fv() {
 
 int Demo::f0() { return 0; }
 
+int Demo::f0Const() const { return 0; }
+
 int Demo::f1(int val) { return val; }
 
 int Demo::f2(int val, const std::string &) {
@@ -20,5 +22,7 @@ int Demo::f2(int val, const std::string &) {
   }
   return val;
 }
+
+int Demo::f2Const(int x, int y) const { return x + y; }
 
 } // namespace fctlog
