@@ -41,7 +41,7 @@ private:
 
   template <typename T, typename... Ts>
   void getEntryMsgInternal(std::stringstream &s, T arg, Ts... args) {
-    s << (s.str().empty() ? "args: " : ", ") << arg;
+    s << (s.str().empty() ? "args: " : " ; ") << arg;
     getEntryMsgInternal(s, args...);
   }
 
