@@ -9,29 +9,21 @@
 #define FCTLOG_METHOD0_INTERNAL(result, name, constant)                        \
   result name() constant override {                                            \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(); };                  \
-    std::string className(FCTLOG_PARENT_CLASS_NAME);                           \
-    className = className.substr(1, className.size() - 2);                     \
-    std::stringstream fctName;                                                 \
-    fctName << className << "::" << __func__;                   \
-    return fctlog::FunctionLogger<decltype(fct())>(fctName.str(), fct)();      \
+    return fctlog::FunctionLogger<decltype(fct())>(FCTLOG_PARENT_CLASS_NAME, __func__, fct)();      \
   }
 
 #define FCTLOG_METHOD1_INTERNAL(result, name, constant, arguments, arg1)       \
   result name arguments constant override {                                    \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1); };              \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct()), decltype(arg1)>(            \
-        fctName.str(), fct, arg1)();                                           \
+        FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1)();                                           \
   }
 
 #define FCTLOG_METHOD2_INTERNAL(result, name, constant, arguments, arg1, arg2) \
   result name arguments constant override {                                    \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1, arg2); };        \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct()), decltype(arg1),             \
-                                  decltype(arg2)>(fctName.str(), fct, arg1,    \
+                                  decltype(arg2)>(FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1,    \
                                                   arg2)();                     \
   }
 
@@ -39,11 +31,9 @@
                                 arg3)                                          \
   result name arguments constant override {                                    \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3); };  \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct()), decltype(arg1),             \
                                   decltype(arg2), decltype(arg3)>(             \
-        fctName.str(), fct, arg1, arg2, arg3)();                               \
+        FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2, arg3)();                               \
   }
 
 #define FCTLOG_METHOD4_INTERNAL(result, name, constant, arguments, arg1, arg2, \
@@ -52,11 +42,9 @@
     auto fct = [&]() {                                                         \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4);                \
     };                                                                         \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct()), decltype(arg1),             \
                                   decltype(arg2), decltype(arg3),              \
-                                  decltype(arg4)>(fctName, fct, arg1, arg2,    \
+                                  decltype(arg4)>(FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2,    \
                                                   arg3, arg4)();               \
   }
 
@@ -66,12 +54,10 @@
     auto fct = [&]() {                                                         \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5);          \
     };                                                                         \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct()), decltype(arg1),             \
                                   decltype(arg2), decltype(arg3),              \
                                   decltype(arg4), decltype(arg5)>(             \
-        fctName, fct, arg1, arg2, arg3, arg4, arg5)();                         \
+        FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2, arg3, arg4, arg5)();                         \
   }
 
 #define FCTLOG_METHOD6_INTERNAL(result, name, constant, arguments, arg1, arg2, \
@@ -80,12 +66,10 @@
     auto fct = [&]() {                                                         \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6);    \
     };                                                                         \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<                                             \
         decltype(fct()), decltype(arg1), decltype(arg2), decltype(arg3),       \
         decltype(arg4), decltype(arg5), decltype(arg6)>(                       \
-        fctName, fct, arg1, arg2, arg3, arg4, arg5, arg6)();                   \
+        FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2, arg3, arg4, arg5, arg6)();                   \
   }
 
 #define FCTLOG_METHOD7_INTERNAL(result, name, constant, arguments, arg1, arg2, \
@@ -95,12 +79,10 @@
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6,     \
                                        arg7);                                  \
     };                                                                         \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<                                             \
         decltype(fct()), decltype(arg1), decltype(arg2), decltype(arg3),       \
         decltype(arg4), decltype(arg5), decltype(arg6), decltype(arg7)>(       \
-        fctName, fct, arg1, arg2, arg3, arg4, arg5, arg6, arg7)();             \
+        FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2, arg3, arg4, arg5, arg6, arg7)();             \
   }
 
 #define FCTLOG_METHOD8_INTERNAL(result, name, constant, arguments, arg1, arg2, \
@@ -110,12 +92,10 @@
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6,     \
                                        arg7, arg8);                            \
     };                                                                         \
-    std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
     return fctlog::FunctionLogger<                                             \
         decltype(fct()), decltype(arg1), decltype(arg2), decltype(arg3),       \
         decltype(arg4), decltype(arg5), decltype(arg6), decltype(arg7),        \
-        decltype(arg8)>(fctName, fct, arg1, arg2, arg3, arg4, arg5, arg6,      \
+        decltype(arg8)>(FCTLOG_PARENT_CLASS_NAME, __func__, fct, arg1, arg2, arg3, arg4, arg5, arg6,      \
                         arg7, arg8)();                                         \
   }
 

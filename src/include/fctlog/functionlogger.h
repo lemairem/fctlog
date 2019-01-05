@@ -14,13 +14,16 @@ namespace fctlog {
 template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
   typedef typename std::function<Tret()> Tfct;
-  FunctionLoggerBase(const std::string &name, Tfct fct, Targs... args)
-      : function(fct), name(name) {
-    Outputter::get() << ">> " << name << " " << getEntryMsg(args...) << "\n";
+  FunctionLoggerBase(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
+      : function(fct) {
+    FullName = className.substr(1, className.size() - 2);
+    FullName.append("::");
+    FullName.append(fctName);
+    Outputter::get() << ">> " << FullName << " " << getEntryMsg(args...) << "\n";
   }
 
   ~FunctionLoggerBase() {
-    Outputter::get() << "<< " << name << " " << exitMsg << "\n";
+    Outputter::get() << "<< " << FullName << " " << exitMsg << "\n";
   }
 
 protected:
@@ -28,7 +31,7 @@ protected:
   void setExitMsg(const std::string &msg) { exitMsg = msg; }
 
 private:
-  std::string name;
+  std::string FullName;
   std::string exitMsg;
   void getEntryMsgInternal(std::stringstream &s) {
     if (s.str().empty()) {
@@ -54,8 +57,8 @@ class FunctionLogger : public FunctionLoggerBase<Tret, Targs...> {
   typedef typename FunctionLoggerBase<Tret, Targs...>::Tfct Tfct;
 
 public:
-  FunctionLogger(const std::string &name, Tfct fct, Targs... args)
-      : FunctionLoggerBase<Tret, Targs...>(name, fct, args...) {}
+  FunctionLogger(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
+      : FunctionLoggerBase<Tret, Targs...>(className, fctName, fct, args...) {}
 
   Tret operator()() {
     std::stringstream s;
@@ -78,8 +81,8 @@ class FunctionLogger<void, Targs...>
   typedef typename FunctionLoggerBase<void, Targs...>::Tfct Tfct;
 
 public:
-  FunctionLogger(const std::string &name, Tfct fct, Targs... args)
-      : FunctionLoggerBase<void, Targs...>(name, fct, args...) {}
+  FunctionLogger(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
+      : FunctionLoggerBase<void, Targs...>(className, fctName, fct, args...) {}
 
   void operator()() {
     std::stringstream s;
