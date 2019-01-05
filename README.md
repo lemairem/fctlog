@@ -30,6 +30,7 @@ Logging message for:
 Restrictions:
 
 * Only virtual functions can be logged (workaround: make function to log virtual).
-* Private functions cannot be logged (workaround: change accessibility to protected).
+* Member function templates cannot be virtual and cannot be logged (a regular member function of a class template can be virtual and logged). 
+* Private functions cannot be logged (workaround: change accessibility to protected or make the logger class friend).
 * Constructor and destructor cannot be logged (functions called inside constructor or destructor can be logged).
 * Output stream operator required for all arguments and return values.
