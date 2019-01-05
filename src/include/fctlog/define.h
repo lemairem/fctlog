@@ -3,14 +3,16 @@
 #pragma once
 
 #define FCTLOG_STR(s) #s
-#define FCTLOG_CLASS_NAME(name) FCTLOG_STR(name)
+#define FCTLOG_CLASS_NAME(name) FCTLOG_STR((name))
 #define FCTLOG_PARENT_CLASS_NAME FCTLOG_CLASS_NAME(FCTLOG_PARENT_CLASS)
 
 #define FCTLOG_METHOD0_INTERNAL(result, name, constant)                        \
   result name() constant override {                                            \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(); };                  \
+    std::string className(FCTLOG_PARENT_CLASS_NAME);                           \
+    className = className.substr(1, className.size() - 2);                     \
     std::stringstream fctName;                                                 \
-    fctName << FCTLOG_PARENT_CLASS_NAME << "::" << __func__;                   \
+    fctName << className << "::" << __func__;                   \
     return fctlog::FunctionLogger<decltype(fct())>(fctName.str(), fct)();      \
   }
 
