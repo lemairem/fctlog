@@ -1,1 +1,2 @@
 subdir('demo')
+subdir('template')
