@@ -4,6 +4,7 @@
 #pragma once
 #include "fctlog/define.h"
 #include "fctlog/outputter.h"
+#include "fctlog/ostream.h"
 #include <functional>
 #include <sstream>
 #include <stdexcept>

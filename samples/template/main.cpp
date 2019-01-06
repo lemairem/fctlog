@@ -5,6 +5,7 @@
 #include "demolog.h"
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 int main() {
   using namespace fctlog;
@@ -14,11 +15,13 @@ int main() {
   try {
 #ifdef FCTLOG_ENABLE
     DemoLog<int, float> intance;
+    OstreamContainer::maxElement = 5;
 #else
     Demo<int, float> intance;
 #endif
     Demo<int, float> &ref = intance;
-    ref.fv();
+    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8};
+    ref.fv(v);
     ref.f1(1);
     ref.f2Const(1, 2);
   } catch (std::exception &e) {
