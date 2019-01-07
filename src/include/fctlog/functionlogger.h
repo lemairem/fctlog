@@ -21,14 +21,14 @@ public:
   typedef typename std::function<Tret()> Tfct;
   FunctionLoggerBase(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
       : function(fct) {
-    FullName = className.substr(1, className.size() - 2);
-    FullName.append("::");
-    FullName.append(fctName);
-    Outputter::get() << ">> " << FullName << " " << getEntryMsg(args...) << "\n";
+    fullName = className.substr(1, className.size() - 2);
+    fullName.append("::");
+    fullName.append(fctName);
+    Outputter::get() << ">> " << fullName << " " << getEntryMsg(args...) << "\n";
   }
 
   ~FunctionLoggerBase() {
-    Outputter::get() << "<< " << FullName << " " << exitMsg << "\n";
+    Outputter::get() << "<< " << fullName << " " << exitMsg << "\n";
   }
 
 protected:
@@ -36,7 +36,7 @@ protected:
   void setExitMsg(const std::string &msg) { exitMsg = msg; }
 
 private:
-  std::string FullName;
+  std::string fullName;
   std::string exitMsg;
   void getEntryMsgInternal(std::stringstream &s) {
     if (s.str().empty()) {
