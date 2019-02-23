@@ -15,6 +15,7 @@ class DemoLog : public Demo {
   FCTLOG_METHOD1(int, f1, (int val = 0), val);
   FCTLOG_METHOD2(int, f2, (int val = 0, const std::string &str = ""), val, str);
   FCTLOG_CONST_METHOD2(int, f2Const, (int x, int y), x, y);
+  FCTLOG_CONST_METHOD1(int, f3, (std::unique_ptr<int>& foo), foo);
 };
 
 } // namespace fctlog

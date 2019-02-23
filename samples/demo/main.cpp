@@ -25,6 +25,8 @@ int main() {
     ref.f2();
     ref.f2Const(1, 2);
     ref.f2(1, "Hello");
+    std::unique_ptr<int> int_unique_ptr = std::unique_ptr<int>(new int(5));
+    ref.f3(int_unique_ptr);
     ref.f2(123, "World");
     ref.f2();
   } catch (std::exception &e) {

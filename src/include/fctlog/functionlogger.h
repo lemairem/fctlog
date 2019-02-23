@@ -13,13 +13,14 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 
 namespace fctlog {
 
 template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
   typedef typename std::function<Tret()> Tfct;
-  FunctionLoggerBase(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
+  FunctionLoggerBase(const std::string &className, const std::string &fctName, Tfct fct, Targs const&... args)
       : function(fct) {
     fullName = className.substr(1, className.size() - 2);
     fullName.append("::");
@@ -45,12 +46,12 @@ private:
   }
 
   template <typename T, typename... Ts>
-  void getEntryMsgInternal(std::stringstream &s, T arg, Ts... args) {
+  void getEntryMsgInternal(std::stringstream &s, T const& arg, Ts const&... args) {
     s << (s.str().empty() ? "args: " : " ; ") << arg;
     getEntryMsgInternal(s, args...);
   }
 
-  template <typename... Ts> std::string getEntryMsg(Ts... args) {
+  template <typename... Ts> std::string getEntryMsg(Ts const&... args) {
     std::stringstream s;
     getEntryMsgInternal(s, args...);
     return s.str();
