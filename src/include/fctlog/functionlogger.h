@@ -65,7 +65,35 @@ public:
   FunctionLogger(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
       : FunctionLoggerBase<Tret, Targs...>(className, fctName, fct, args...) {}
 
-  Tret operator()() {
+  /**
+   * Overload for void as return type
+   *
+   * Executes the internal method and prints either the exception or that the method returned
+   */
+  template<typename TReturnType = Tret>
+  typename std::enable_if<std::is_void<TReturnType>::value, TReturnType>::type operator()() {
+    std::stringstream s;
+    try {
+      this->function();
+      s << "return";
+      this->setExitMsg(s.str());
+      return;
+    } catch (std::exception &e) {
+      this->handle_exception(e, s);
+      throw;
+    }
+  }
+
+  /**
+   * Overload for non void return types
+   *
+   * Executes the internal method and prints either the exception or that the method returned with the specific value
+   * it returned.
+   *
+   * @return value of the internally wrapped function.
+   */
+  template<typename TReturnType = Tret>
+  typename std::enable_if<!std::is_void<TReturnType>::value, TReturnType>::type operator()() {
     std::stringstream s;
     try {
       auto ret = this->function();
@@ -73,33 +101,22 @@ public:
       this->setExitMsg(s.str());
       return ret;
     } catch (std::exception &e) {
-      s << "throw: " << typeid(e).name() << " '" << e.what() << "'";
-      this->setExitMsg(s.str());
+      this->handle_exception(e, s);
       throw;
     }
   }
-};
 
-template <typename... Targs>
-class FunctionLogger<void, Targs...>
-    : public FunctionLoggerBase<void, Targs...> {
-  typedef typename FunctionLoggerBase<void, Targs...>::Tfct Tfct;
+private:
 
-public:
-  FunctionLogger(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
-      : FunctionLoggerBase<void, Targs...>(className, fctName, fct, args...) {}
-
-  void operator()() {
-    std::stringstream s;
-    try {
-      this->function();
-      this->setExitMsg("return");
-      return;
-    } catch (std::exception &e) {
-      s << "throw: " << typeid(e).name() << " '" << e.what() << "'";
-      this->setExitMsg(s.str());
-      throw;
-    }
+  /**
+   * Handles the given exception by printing the type and the ::what value to the given stringstream.
+   *
+   * Demangles the type name if demangling could be found during compile time.
+   */
+  void handle_exception(std::exception const& e, std::stringstream& s) {
+    auto const type_id_name = typeid(e).name();
+    s << "throw: " << type_id_name << " '" << e.what() << "'";
+    this->setExitMsg(s.str());
   }
 };
 
