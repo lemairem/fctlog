@@ -2,6 +2,8 @@
 // Copyright (c) 2018 Lemaire Marc
 #pragma once
 
+#include "fctlog/functionlogger.h"
+
 #define FCTLOG_STR(s) #s
 #define FCTLOG_CLASS_NAME(name) FCTLOG_STR((name))
 #define FCTLOG_PARENT_CLASS_NAME FCTLOG_CLASS_NAME(FCTLOG_PARENT_CLASS)
