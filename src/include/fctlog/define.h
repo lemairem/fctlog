@@ -129,7 +129,7 @@
 
 #define FCTLOG_METHOD8(result, name, arguments, arg1, arg2, arg3, arg4, arg5,  \
                        arg6, arg7, arg8)                                       \
-  FCTLOG_METHOD7_INTERNAL(result, name, , arguments, arg1, arg2, arg3, arg4,   \
+  FCTLOG_METHOD8_INTERNAL(result, name, , arguments, arg1, arg2, arg3, arg4,   \
                           arg5, arg6, arg7, arg8)
 
 #define FCTLOG_CONST_METHOD0(result, name)                                     \
@@ -165,5 +165,5 @@
 
 #define FCTLOG_CONST_METHOD8(result, name, arguments, arg1, arg2, arg3, arg4,  \
                              arg5, arg6, arg7, arg8)                           \
-  FCTLOG_METHOD7_INTERNAL(result, name, const, arguments, arg1, arg2, arg3,    \
+  FCTLOG_METHOD8_INTERNAL(result, name, const, arguments, arg1, arg2, arg3,    \
                           arg4, arg5, arg6, arg7, arg8)
