@@ -4,15 +4,22 @@
 #pragma once
 #include "fctlog/define.h"
 #include "fctlog/outputter.h"
+#include "fctlog/config.h"
 
 #ifdef FCTLOG_OSTREAM_CONTAINER
 #include "fctlog/ostream.h"
 #endif
 
+#include <memory>
 #include <functional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
+
+#ifdef CONFIG_FCTLOG_DEMANGLE
+#include <cxxabi.h>
+#endif
 
 namespace fctlog {
 
@@ -115,7 +122,21 @@ private:
    */
   void handle_exception(std::exception const& e, std::stringstream& s) {
     auto const type_id_name = typeid(e).name();
-    s << "throw: " << type_id_name << " '" << e.what() << "'";
+#ifdef CONFIG_FCTLOG_DEMANGLE
+    int status = 0;
+    auto const demangled_name = abi::__cxa_demangle(type_id_name, 0, 0, &status);
+    if (demangled_name == nullptr) {
+#endif
+      s << "throw: " << type_id_name << " '" << e.what() << "'";
+#ifdef CONFIG_FCTLOG_DEMANGLE
+    } else {
+      // Use a destructor in case something goes wrong during printing, in order
+      // to ascertain proper deletion of the demangled name.
+      auto deleter = [](char * const ptr) { free(ptr); };
+      auto const demangled_unique_ptr = std::unique_ptr<char, decltype(deleter)>(demangled_name, deleter);
+      s << "throw: " << demangled_name << " '" << e.what() << "'";
+    }
+#endif
     this->setExitMsg(s.str());
   }
 };
