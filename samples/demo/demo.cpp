@@ -2,10 +2,11 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #include "demo.h"
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
-namespace fctlog { namespace internal {
+namespace fctlog {
+namespace internal {
 
 void Demo::fv() {
   // do something
@@ -24,11 +25,11 @@ int Demo::f2(int val, const std::string &) {
   return val;
 }
 
-int Demo::f3(std::unique_ptr<int>& ptr) const {
+int Demo::f3(std::unique_ptr<int> &ptr) const {
   int retVal = *ptr;
   return retVal;
 }
 
 int Demo::f2Const(int x, int y) const { return x + y; }
-
-}} // namespace fctlog
+}
+} // namespace fctlog

@@ -9,10 +9,10 @@
 #include "fctlog/define.h"
 #endif
 
-namespace fctlog { namespace internal {
+namespace fctlog {
+namespace internal {
 
-template <typename T1, typename T2>
-class Demo {
+template <typename T1, typename T2> class Demo {
 public:
   virtual ~Demo() = default;
   virtual void fv(const std::vector<T1> &) {}
@@ -22,8 +22,7 @@ public:
 
 #ifdef FCTLOG_ENABLE
 #define FCTLOG_PARENT_CLASS Demo<T1, T2>
-template <typename T1, typename T2>
-class DemoLog : public Demo<T1, T2> {
+template <typename T1, typename T2> class DemoLog : public Demo<T1, T2> {
 public:
   FCTLOG_METHOD1(void, fv, (const std::vector<T1> &v), v);
   FCTLOG_METHOD1(int, f1, (T1 x), x);
@@ -34,11 +33,9 @@ public:
 }
 
 #ifdef FCTLOG_ENABLE
-template<typename T1, typename T2>
-using Demo = internal::DemoLog<T1, T2>;
+template <typename T1, typename T2> using Demo = internal::DemoLog<T1, T2>;
 #else
-template<typename T1, typename T2>
-using Demo = internal::Demo<T1, T2>;
+template <typename T1, typename T2> using Demo = internal::Demo<T1, T2>;
 #endif
 
 } // namespace fctlog

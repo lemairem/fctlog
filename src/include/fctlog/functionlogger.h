@@ -2,15 +2,15 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
-#include "fctlog/outputter.h"
 #include "fctlog/config.h"
+#include "fctlog/outputter.h"
 
 #ifdef FCTLOG_OSTREAM_CONTAINER
 #include "fctlog/ostream.h"
 #endif
 
-#include <memory>
 #include <functional>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -25,12 +25,14 @@ namespace fctlog {
 template <typename Tret, typename... Targs> class FunctionLoggerBase {
 public:
   typedef typename std::function<Tret()> Tfct;
-  FunctionLoggerBase(const std::string &className, const std::string &fctName, Tfct fct, Targs const&... args)
+  FunctionLoggerBase(const std::string &className, const std::string &fctName,
+                     Tfct fct, Targs const &... args)
       : function(fct) {
     fullName = className.substr(1, className.size() - 2);
     fullName.append("::");
     fullName.append(fctName);
-    Outputter::get() << ">> " << fullName << " " << getEntryMsg(args...) << "\n";
+    Outputter::get() << ">> " << fullName << " " << getEntryMsg(args...)
+                     << "\n";
   }
 
   ~FunctionLoggerBase() {
@@ -51,12 +53,13 @@ private:
   }
 
   template <typename T, typename... Ts>
-  void getEntryMsgInternal(std::stringstream &s, T const& arg, Ts const&... args) {
+  void getEntryMsgInternal(std::stringstream &s, T const &arg,
+                           Ts const &... args) {
     s << (s.str().empty() ? "args: " : " ; ") << arg;
     getEntryMsgInternal(s, args...);
   }
 
-  template <typename... Ts> std::string getEntryMsg(Ts const&... args) {
+  template <typename... Ts> std::string getEntryMsg(Ts const &... args) {
     std::stringstream s;
     getEntryMsgInternal(s, args...);
     return s.str();
@@ -68,16 +71,19 @@ class FunctionLogger : public FunctionLoggerBase<Tret, Targs...> {
   typedef typename FunctionLoggerBase<Tret, Targs...>::Tfct Tfct;
 
 public:
-  FunctionLogger(const std::string &className, const std::string &fctName, Tfct fct, Targs... args)
+  FunctionLogger(const std::string &className, const std::string &fctName,
+                 Tfct fct, Targs... args)
       : FunctionLoggerBase<Tret, Targs...>(className, fctName, fct, args...) {}
 
   /**
    * Overload for void as return type
    *
-   * Executes the internal method and prints either the exception or that the method returned
+   * Executes the internal method and prints either the exception or that the
+   * method returned
    */
-  template<typename TReturnType = Tret>
-  typename std::enable_if<std::is_void<TReturnType>::value, TReturnType>::type operator()() {
+  template <typename TReturnType = Tret>
+  typename std::enable_if<std::is_void<TReturnType>::value, TReturnType>::type
+  operator()() {
     std::stringstream s;
     try {
       this->function();
@@ -93,13 +99,15 @@ public:
   /**
    * Overload for non void return types
    *
-   * Executes the internal method and prints either the exception or that the method returned with the specific value
+   * Executes the internal method and prints either the exception or that the
+   * method returned with the specific value
    * it returned.
    *
    * @return value of the internally wrapped function.
    */
-  template<typename TReturnType = Tret>
-  typename std::enable_if<!std::is_void<TReturnType>::value, TReturnType>::type operator()() {
+  template <typename TReturnType = Tret>
+  typename std::enable_if<!std::is_void<TReturnType>::value, TReturnType>::type
+  operator()() {
     std::stringstream s;
     try {
       auto ret = this->function();
@@ -113,17 +121,18 @@ public:
   }
 
 private:
-
   /**
-   * Handles the given exception by printing the type and the ::what value to the given stringstream.
+   * Handles the given exception by printing the type and the ::what value to
+   * the given stringstream.
    *
    * Demangles the type name if demangling could be found during compile time.
    */
-  void handle_exception(std::exception const& e, std::stringstream& s) {
+  void handle_exception(std::exception const &e, std::stringstream &s) {
     auto const type_id_name = typeid(e).name();
 #ifdef CONFIG_FCTLOG_DEMANGLE
     int status = 0;
-    auto const demangled_name = abi::__cxa_demangle(type_id_name, 0, 0, &status);
+    auto const demangled_name =
+        abi::__cxa_demangle(type_id_name, 0, 0, &status);
     if (demangled_name == nullptr) {
 #endif
       s << "throw: " << type_id_name << " '" << e.what() << "'";
@@ -131,8 +140,9 @@ private:
     } else {
       // Use a destructor in case something goes wrong during printing, in order
       // to ascertain proper deletion of the demangled name.
-      auto deleter = [](char * const ptr) { free(ptr); };
-      auto const demangled_unique_ptr = std::unique_ptr<char, decltype(deleter)>(demangled_name, deleter);
+      auto deleter = [](char *const ptr) { free(ptr); };
+      auto const demangled_unique_ptr =
+          std::unique_ptr<char, decltype(deleter)>(demangled_name, deleter);
       s << "throw: " << demangled_name << " '" << e.what() << "'";
     }
 #endif

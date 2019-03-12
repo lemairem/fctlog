@@ -2,8 +2,8 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
-#include <string>
 #include <memory>
+#include <string>
 
 #ifdef FCTLOG_ENABLE
 #include "fctlog/define.h"
@@ -22,7 +22,7 @@ public:
   virtual int f1(int val = 0);
   virtual int f2(int val = 0, const std::string &str = "");
   virtual int f2Const(int x, int y) const;
-  virtual int f3(std::unique_ptr<int>& foo) const;
+  virtual int f3(std::unique_ptr<int> &foo) const;
 };
 
 #ifdef FCTLOG_ENABLE
@@ -35,7 +35,7 @@ public:
   FCTLOG_METHOD1(int, f1, (int val = 0), val);
   FCTLOG_METHOD2(int, f2, (int val = 0, const std::string &str = ""), val, str);
   FCTLOG_CONST_METHOD2(int, f2Const, (int x, int y), x, y);
-  FCTLOG_CONST_METHOD1(int, f3, (std::unique_ptr<int>& foo), foo);
+  FCTLOG_CONST_METHOD1(int, f3, (std::unique_ptr<int> & foo), foo);
 };
 #undef FCTLOG_PARENT_CLASS
 #endif
