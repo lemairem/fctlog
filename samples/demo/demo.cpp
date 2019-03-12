@@ -3,6 +3,7 @@
 
 #include "demo.h"
 #include <stdexcept>
+#include <iostream>
 
 namespace fctlog {
 
@@ -21,6 +22,11 @@ int Demo::f2(int val, const std::string &) {
     throw std::runtime_error("MyException");
   }
   return val;
+}
+
+int Demo::f3(std::unique_ptr<int>& ptr) const {
+  int retVal = *ptr;
+  return retVal;
 }
 
 int Demo::f2Const(int x, int y) const { return x + y; }

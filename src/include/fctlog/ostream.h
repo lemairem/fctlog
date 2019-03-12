@@ -4,6 +4,7 @@
 #pragma once
 #include <iostream>
 #include <memory>
+#include <vector>
 
 namespace fctlog {
 
@@ -16,22 +17,30 @@ int OstreamContainerInternal<T>::maxElement = 10;
 
 struct OstreamContainer : public OstreamContainerInternal<void> {};
 
-template <template <class, class> class Container, class T, class Alloc = std::allocator <T> >
-std::ostream& operator << ( 
-std::ostream& os,
-const Container <T, Alloc> & container )
-{
-int count = 0;
-os << "[";
-for (const T& e : container) {
+template <typename PT, typename DT>
+std::ostream& operator << (
+    std::ostream& os,
+    const std::unique_ptr<PT, DT>& ptr
+) {
+  return os << reinterpret_cast<void*>(ptr.get());
+}
+
+template <typename PT, typename DT>
+std::ostream& operator << (
+    std::ostream& os,
+    const std::vector<PT, DT>& vector
+) {
+  int count = 0;
+  os << "[";
+  for (const PT& e : vector) {
     os << (count == 0 ? "" : ", ") << e;
     ++count;
     if(count >= OstreamContainer::maxElement) {
         os << ", ...";
         break;
     }
-}
-return os << "]";
+  }
+  return os << "]";
 }
 
-} // namespace fctlog    
+} // namespace fctlog
