@@ -55,7 +55,7 @@ private:
   template <typename T, typename... Ts>
   void getEntryMsgInternal(std::stringstream &s, T const &arg,
                            Ts const &... args) {
-    s << (s.str().empty() ? "args: " : " ; ") << arg;
+    s << (s.str().empty() ? "args: " : Outputter::getSeparator()) << arg;
     getEntryMsgInternal(s, args...);
   }
 
