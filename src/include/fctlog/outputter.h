@@ -4,35 +4,34 @@
 #pragma once
 #include <iostream>
 #include <memory>
+#include <functional>
 
 namespace fctlog {
 
 template <typename T> class OutputterInternal {
 public:
   static void set(const std::ostream &stream) {
-    if (!output) {
-      createOutput(stream);
-    } else {
       output->rdbuf(stream.rdbuf());
-    }
+      fctOutput = [](){return output;};
   }
 
-  static std::ostream &get() {
-    if (!output) {
-      createOutput(std::cout);
-    }
-    return *output;
+static void set(const std::function<std::shared_ptr<std::ostream>()>& fctStream) {
+  fctOutput = fctStream;
+}
+
+  static std::ostream& get() {
+      return *(fctOutput());
   }
 
 private:
-  static std::unique_ptr<std::ostream> output;
-  static void createOutput(const std::ostream &stream) {
-    output = std::unique_ptr<std::ostream>(new std::ostream(stream.rdbuf()));
-  }
+  static std::shared_ptr<std::ostream> output;
+  static std::function<std::shared_ptr<std::ostream>()> fctOutput;
 };
 
 template <typename T>
-std::unique_ptr<std::ostream> OutputterInternal<T>::output;
+std::shared_ptr<std::ostream> OutputterInternal<T>::output = std::make_shared<std::ostream>(std::cout.rdbuf());
+template <typename T>
+std::function<std::shared_ptr<std::ostream>()> OutputterInternal<T>::fctOutput = [](){return OutputterInternal<T>::output;};
 
 class Outputter : public OutputterInternal<void> {};
 
