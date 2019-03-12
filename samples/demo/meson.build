@@ -1,5 +1,5 @@
 executable(
-    'fctlog_demo', 
+    'fctlog_demo',
     [
         'main.cpp'
         , 'demo.cpp'

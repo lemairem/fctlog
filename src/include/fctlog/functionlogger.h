@@ -2,7 +2,6 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
-#include "fctlog/define.h"
 #include "fctlog/outputter.h"
 #include "fctlog/config.h"
 

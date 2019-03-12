@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 
-namespace fctlog {
+namespace fctlog { namespace internal {
 
 void Demo::fv() {
   // do something
@@ -31,4 +31,4 @@ int Demo::f3(std::unique_ptr<int>& ptr) const {
 
 int Demo::f2Const(int x, int y) const { return x + y; }
 
-} // namespace fctlog
+}} // namespace fctlog

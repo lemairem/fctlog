@@ -2,22 +2,25 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #include "demo.h"
-#include "demolog.h"
+// for cout
 #include <iostream>
+// for stringstream
+#include <sstream>
 #include <stdexcept>
+
+#ifdef FCTLOG_ENABLE
+#include "fctlog/outputter.h"
+#endif
 
 int main() {
   using namespace fctlog;
   std::ostringstream myLogging;
+#ifdef FCTLOG_ENABLE
   Outputter::set(myLogging);
+#endif
 
   try {
-#ifdef FCTLOG_ENABLE
-    DemoLog intance;
-#else
-    Demo intance;
-#endif
-    Demo &ref = intance;
+    Demo ref;
     ref.fv();
     ref.f0();
     ref.f0Const();
