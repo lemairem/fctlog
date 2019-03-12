@@ -19,7 +19,7 @@ struct OstreamContainer : public OstreamContainerInternal<void> {};
 
 template <typename PT, typename DT>
 std::ostream &operator<<(std::ostream &os, const std::unique_ptr<PT, DT> &ptr) {
-  return os << reinterpret_cast<void *>(ptr.get());
+  return os << reinterpret_cast<void *>(ptr.get()) << " -> " << *ptr;
 }
 
 template <typename PT, typename DT>
