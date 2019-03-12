@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <iomanip>
 
 namespace fctlog {
 
@@ -41,6 +42,11 @@ std::ostream& operator << (
     }
   }
   return os << "]";
+}
+
+inline std::ostream& operator<<(std::ostream& os, const std::uint8_t& val) {
+    os << "0x" << std::hex << std::setw(2) << std::setfill('0') << +val;
+    return os;
 }
 
 } // namespace fctlog
