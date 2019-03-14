@@ -2,28 +2,19 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #include "demo.h"
-// for cout
+#include <fctlog/outputter.h>
 #include <iostream>
-// for stringstream
 #include <sstream>
 #include <stdexcept>
 #include <vector>
 
-#ifdef FCTLOG_ENABLE
-#include "fctlog/outputter.h"
-#endif
-
 int main() {
-  using namespace fctlog;
+  using namespace demo;
   std::ostringstream myLogging;
-#ifdef FCTLOG_ENABLE
-  Outputter::set(myLogging);
-#endif
+  fctlog::Outputter::set(myLogging);
 
   try {
-#ifdef FCTLOG_ENABLE
-    OstreamContainer::maxElement = 5;
-#endif
+    fctlog::OstreamContainer::maxElement = 5;
     Demo<int, float> ref;
     std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8};
     ref.fv(v);

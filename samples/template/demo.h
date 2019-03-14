@@ -2,14 +2,11 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
+#include <fctlog/define.h>
 #include <string>
 #include <vector>
 
-#ifdef FCTLOG_ENABLE
-#include "fctlog/define.h"
-#endif
-
-namespace fctlog {
+namespace demo {
 namespace internal {
 
 template <typename T1, typename T2> class Demo {
@@ -38,4 +35,4 @@ template <typename T1, typename T2> using Demo = internal::DemoLog<T1, T2>;
 template <typename T1, typename T2> using Demo = internal::Demo<T1, T2>;
 #endif
 
-} // namespace fctlog
+} // namespace demo
