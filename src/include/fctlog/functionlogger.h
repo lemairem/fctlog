@@ -19,6 +19,9 @@
 #ifdef CONFIG_FCTLOG_DEMANGLE
 #include <cxxabi.h>
 #endif
+#ifdef CONFIG_FCTLOG_BOOST_EXCEPTION
+#include <boost/exception/all.hpp>
+#endif
 
 namespace fctlog {
 
@@ -94,6 +97,16 @@ public:
       this->handle_exception(e, s);
       throw;
     }
+#ifdef CONFIG_FCTLOG_BOOST_EXCEPTION
+    catch (boost::exception &e) {
+      this->handle_exception(e, s);
+      throw;
+    }
+#endif
+    catch (...) {
+      this->setExitMsg("throw: unknown exception");
+      throw;
+    }
   }
 
   /**
@@ -118,16 +131,34 @@ public:
       this->handle_exception(e, s);
       throw;
     }
+#ifdef CONFIG_FCTLOG_BOOST_EXCEPTION
+    catch (boost::exception &e) {
+      this->handle_exception(e, s);
+      throw;
+    }
+#endif
+    catch (...) {
+      this->setExitMsg("throw: unknown exception");
+      throw;
+    }
   }
 
 private:
+  std::string getExceptionMessage(std::exception const &e) { return e.what(); }
+
+#ifdef CONFIG_FCTLOG_BOOST_EXCEPTION
+  std::string getExceptionMessage(boost::exception const &e) {
+    return boost::diagnostic_information(e);
+  }
+#endif
+
   /**
    * Handles the given exception by printing the type and the ::what value to
    * the given stringstream.
    *
    * Demangles the type name if demangling could be found during compile time.
    */
-  void handle_exception(std::exception const &e, std::stringstream &s) {
+  template <class T> void handle_exception(T const &e, std::stringstream &s) {
     auto const type_id_name = typeid(e).name();
 #ifdef CONFIG_FCTLOG_DEMANGLE
     int status = 0;
@@ -135,7 +166,7 @@ private:
         abi::__cxa_demangle(type_id_name, 0, 0, &status);
     if (demangled_name == nullptr) {
 #endif
-      s << "throw: " << type_id_name << " '" << e.what() << "'";
+      s << "throw: " << type_id_name << " '" << getExceptionMessage(e) << "'";
 #ifdef CONFIG_FCTLOG_DEMANGLE
     } else {
       // Use a destructor in case something goes wrong during printing, in order
@@ -143,7 +174,7 @@ private:
       auto deleter = [](char *const ptr) { free(ptr); };
       auto const demangled_unique_ptr =
           std::unique_ptr<char, decltype(deleter)>(demangled_name, deleter);
-      s << "throw: " << demangled_name << " '" << e.what() << "'";
+      s << "throw: " << demangled_name << " '" << getExceptionMessage(e) << "'";
     }
 #endif
     this->setExitMsg(s.str());
