@@ -13,10 +13,10 @@
 #endif
 
 int main() {
-  using namespace fctlog;
+  using namespace demo;
   std::ostringstream myLogging;
 #ifdef FCTLOG_ENABLE
-  Outputter::set(myLogging);
+  fctlog::Outputter::set(myLogging);
 #endif
 
   try {

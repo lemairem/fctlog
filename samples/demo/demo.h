@@ -2,15 +2,11 @@
 // Copyright (c) 2018 Lemaire Marc
 
 #pragma once
+#include <fctlog/define.h>
 #include <memory>
 #include <string>
 
-#ifdef FCTLOG_ENABLE
-#include "fctlog/define.h"
-#endif
-
-namespace fctlog {
-
+namespace demo {
 namespace internal {
 
 class Demo {
@@ -48,4 +44,4 @@ using Demo = internal::DemoLog;
 using Demo = internal::Demo;
 #endif
 
-} // namespace fctlog
+} // namespace demo

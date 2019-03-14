@@ -11,7 +11,7 @@
 
 #define FCTLOG_METHOD0_INTERNAL(result, name, constant)                        \
   result name() constant override {                                            \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name();                                      \
     }                                                                          \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(); };                  \
@@ -21,7 +21,7 @@
 
 #define FCTLOG_METHOD1_INTERNAL(result, name, constant, arguments, arg1)       \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1);                                  \
     }                                                                          \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1); };              \
@@ -31,7 +31,7 @@
 
 #define FCTLOG_METHOD2_INTERNAL(result, name, constant, arguments, arg1, arg2) \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2);                            \
     }                                                                          \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1, arg2); };        \
@@ -43,7 +43,7 @@
 #define FCTLOG_METHOD3_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3)                                          \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3);                      \
     }                                                                          \
     auto fct = [&]() { return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3); };  \
@@ -55,7 +55,7 @@
 #define FCTLOG_METHOD4_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3, arg4)                                    \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4);                \
     }                                                                          \
     auto fct = [&]() {                                                         \
@@ -70,7 +70,7 @@
 #define FCTLOG_METHOD5_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3, arg4, arg5)                              \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5);          \
     }                                                                          \
     auto fct = [&]() {                                                         \
@@ -86,7 +86,7 @@
 #define FCTLOG_METHOD6_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3, arg4, arg5, arg6)                        \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6);    \
     }                                                                          \
     auto fct = [&]() {                                                         \
@@ -102,7 +102,7 @@
 #define FCTLOG_METHOD7_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3, arg4, arg5, arg6, arg7)                  \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6,     \
                                        arg7);                                  \
     }                                                                          \
@@ -120,7 +120,7 @@
 #define FCTLOG_METHOD8_INTERNAL(result, name, constant, arguments, arg1, arg2, \
                                 arg3, arg4, arg5, arg6, arg7, arg8)            \
   result name arguments constant override {                                    \
-    if (!Outputter::isEnable()) {                                              \
+    if (!fctlog::Outputter::isEnable()) {                                      \
       return FCTLOG_PARENT_CLASS::name(arg1, arg2, arg3, arg4, arg5, arg6,     \
                                        arg7, arg8);                            \
     }                                                                          \
