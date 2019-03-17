@@ -8,15 +8,18 @@
 #include <iomanip>
 #include <iostream>
 #include <list>
+#include <map>
 #include <memory>
 #include <queue>
 #include <set>
 #include <stack>
+#include <tuple>
+#include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
-// TODO: ostream for map, multimap, unordered_map, unordered_multimap, tuple,
-// pair
+// TODO: ostream for map, multimap, unordered_map, unordered_multimap
 
 namespace fctlog {
 
@@ -36,22 +39,6 @@ template <typename T> std::ostream &printPtr(std::ostream &os, T *ptr) {
   }
   return os;
 }
-
-template <template <class, class...> class Container, class T1, class... T2>
-std::ostream &printContainer(std::ostream &os,
-                             const Container<T1, T2...> &container) {
-  int count = 0;
-  os << "[";
-  for (const T1 &e : container) {
-    os << (count == 0 ? "" : ", ") << e;
-    ++count;
-    if (count >= OstreamContainer::maxElement) {
-      os << ", ...";
-      break;
-    }
-  }
-  return os << "]";
-}
 } // namespace internal
 
 template <typename PT, typename DT>
@@ -68,6 +55,24 @@ template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::weak_ptr<T> &ptr) {
   return os << ptr.lock();
 }
+
+namespace internal {
+template <template <class, class...> class Container, class T1, class... T2>
+std::ostream &printContainer(std::ostream &os,
+                             const Container<T1, T2...> &container) {
+  int count = 0;
+  os << "[";
+  for (const T1 &e : container) {
+    os << (count == 0 ? "" : ", ") << e;
+    ++count;
+    if (count >= OstreamContainer::maxElement) {
+      os << ", ...";
+      break;
+    }
+  }
+  return os << "]";
+}
+} // namespace internal
 
 #define FCTLOG_INTERNAL_CONTAINER_OSTREAM2(CONTAINER)                          \
   template <typename T1, typename T2>                                          \
@@ -107,6 +112,35 @@ FCTLOG_INTERNAL_CONTAINER_OSTREAM4(std::unordered_multiset)
 template <typename T, std::size_t N>
 std::ostream &operator<<(std::ostream &os, const std::array<T, N> &container) {
   return internal::printContainer(os, container);
+}
+
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &pair) {
+  os << "[" << pair.first << ", " << pair.second << "]";
+  return os;
+}
+
+namespace internal {
+template <size_t N, typename... T>
+typename std::enable_if<(N >= sizeof...(T))>::type
+printTuple(std::ostream &, const std::tuple<T...> &) {}
+
+template <size_t N, typename... T>
+typename std::enable_if<(N < sizeof...(T))>::type
+printTuple(std::ostream &os, const std::tuple<T...> &tuple) {
+  if (N != 0) {
+    os << ", ";
+  }
+  os << std::get<N>(tuple);
+  printTuple<N + 1>(os, tuple);
+}
+} // namespace internal
+
+template <typename... T>
+std::ostream &operator<<(std::ostream &os, const std::tuple<T...> &tuple) {
+  os << "[";
+  internal::printTuple<0>(os, tuple);
+  return os << "]";
 }
 
 inline std::ostream &operator<<(std::ostream &os, const std::uint8_t &val) {
