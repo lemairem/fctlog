@@ -19,16 +19,12 @@
 #include <utility>
 #include <vector>
 
-// TODO: ostream for map, multimap, unordered_map, unordered_multimap
-
 namespace fctlog {
 
 template <typename T> struct OstreamContainerInternal {
   static int maxElement;
 };
-
 template <typename T> int OstreamContainerInternal<T>::maxElement = 10;
-
 struct OstreamContainer : public OstreamContainerInternal<void> {};
 
 namespace internal {
@@ -56,13 +52,19 @@ std::ostream &operator<<(std::ostream &os, const std::weak_ptr<T> &ptr) {
   return os << ptr.lock();
 }
 
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &pair) {
+  os << "[" << pair.first << ", " << pair.second << "]";
+  return os;
+}
+
 namespace internal {
 template <template <class, class...> class Container, class T1, class... T2>
 std::ostream &printContainer(std::ostream &os,
                              const Container<T1, T2...> &container) {
   int count = 0;
   os << "[";
-  for (const T1 &e : container) {
+  for (const auto &e : container) {
     os << (count == 0 ? "" : ", ") << e;
     ++count;
     if (count >= OstreamContainer::maxElement) {
@@ -74,50 +76,32 @@ std::ostream &printContainer(std::ostream &os,
 }
 } // namespace internal
 
-#define FCTLOG_INTERNAL_CONTAINER_OSTREAM2(CONTAINER)                          \
-  template <typename T1, typename T2>                                          \
+#define FCTLOG_INTERNAL_CONTAINER_OSTREAM(CONTAINER)                           \
+  template <typename T1, typename... T2>                                       \
   std::ostream &operator<<(std::ostream &os,                                   \
-                           const CONTAINER<T1, T2> &container) {               \
+                           const CONTAINER<T1, T2...> &container) {            \
     return internal::printContainer(os, container);                            \
   }
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::vector)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::deque)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::forward_list)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::list)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::stack)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM2(std::queue)
-#undef FCTLOG_INTERNAL_CONTAINER_OSTREAM2
-
-#define FCTLOG_INTERNAL_CONTAINER_OSTREAM3(CONTAINER)                          \
-  template <typename T1, typename T2, typename T3>                             \
-  std::ostream &operator<<(std::ostream &os,                                   \
-                           const CONTAINER<T1, T2, T3> &container) {           \
-    return internal::printContainer(os, container);                            \
-  }
-FCTLOG_INTERNAL_CONTAINER_OSTREAM3(std::set)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM3(std::multiset)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM3(std::priority_queue)
-#undef FCTLOG_INTERNAL_CONTAINER_OSTREAM3
-
-#define FCTLOG_INTERNAL_CONTAINER_OSTREAM4(CONTAINER)                          \
-  template <typename T1, typename T2, typename T3, typename T4>                \
-  std::ostream &operator<<(std::ostream &os,                                   \
-                           const CONTAINER<T1, T2, T3, T4> &container) {       \
-    return internal::printContainer(os, container);                            \
-  }
-FCTLOG_INTERNAL_CONTAINER_OSTREAM4(std::unordered_set)
-FCTLOG_INTERNAL_CONTAINER_OSTREAM4(std::unordered_multiset)
-#undef FCTLOG_INTERNAL_CONTAINER_OSTREAM4
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::vector)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::deque)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::forward_list)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::list)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::stack)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::queue)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::set)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::multiset)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::priority_queue)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::unordered_set)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::unordered_multiset)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::map)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::multimap)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::unordered_map)
+FCTLOG_INTERNAL_CONTAINER_OSTREAM(std::unordered_multimap)
+#undef FCTLOG_INTERNAL_CONTAINER_OSTREAM
 
 template <typename T, std::size_t N>
 std::ostream &operator<<(std::ostream &os, const std::array<T, N> &container) {
   return internal::printContainer(os, container);
-}
-
-template <class T1, class T2>
-std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &pair) {
-  os << "[" << pair.first << ", " << pair.second << "]";
-  return os;
 }
 
 namespace internal {
