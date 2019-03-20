@@ -12,13 +12,13 @@ namespace internal {
 class Demo {
 public:
   virtual ~Demo() = default;
-  virtual void fv();
-  virtual int f0();
-  virtual int f0Const() const;
-  virtual int f1(int val = 0);
-  virtual int f2(int val = 0, const std::string &str = "");
-  virtual int f2Const(int x, int y) const;
-  virtual int f3(std::unique_ptr<int> &foo) const;
+  FCTLOG_VIRTUAL void fv();
+  FCTLOG_VIRTUAL int f0();
+  FCTLOG_VIRTUAL int f0Const() const;
+  FCTLOG_VIRTUAL int f1(int val = 0);
+  FCTLOG_VIRTUAL int f2(int val = 0, const std::string &str = "");
+  FCTLOG_VIRTUAL int f2Const(int x, int y) const;
+  FCTLOG_VIRTUAL int f3(std::unique_ptr<int> &foo) const;
 };
 
 #ifdef FCTLOG_ENABLE

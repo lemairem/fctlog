@@ -2,9 +2,18 @@
 // Copyright (c) 2018 Lemaire Marc
 #pragma once
 
+#ifdef FCTLOG_ENABLE
 #include "fctlog/functionlogger.h"
 #include "fctlog/outputter.h"
+#endif
 
+#ifdef FCTLOG_ENABLE
+#define FCTLOG_VIRTUAL virtual
+#else
+#define FCTLOG_VIRTUAL
+#endif
+
+#ifdef FCTLOG_ENABLE
 #define FCTLOG_STR(s) #s
 #define FCTLOG_CLASS_NAME(name) FCTLOG_STR((name))
 #define FCTLOG_PARENT_CLASS_NAME FCTLOG_CLASS_NAME(FCTLOG_PARENT_CLASS)
@@ -203,3 +212,5 @@
                              arg5, arg6, arg7, arg8)                           \
   FCTLOG_METHOD8_INTERNAL(result, name, const, arguments, arg1, arg2, arg3,    \
                           arg4, arg5, arg6, arg7, arg8)
+
+#endif // FCTLOG_ENABLE
