@@ -5,7 +5,7 @@
 #include "fctlog/config.h"
 #include "fctlog/outputter.h"
 
-#ifdef FCTLOG_OSTREAM_CONTAINER
+#ifdef FCTLOG_OSTREAM
 #include "fctlog/ostream.h"
 #endif
 
