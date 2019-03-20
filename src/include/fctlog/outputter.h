@@ -20,7 +20,7 @@ public:
     fctOutput = fctStream;
   }
 
-  static std::ostream &get() { return *(fctOutput()); }
+  static std::shared_ptr<std::ostream> get() { return fctOutput(); }
   static void setSeparator(const std::string &s) { separator = s; }
   static const std::string &getSeparator() { return separator; }
   static void enable(bool flag = true) { enableFlag = flag; }

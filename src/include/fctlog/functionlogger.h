@@ -34,12 +34,12 @@ public:
     fullName = className.substr(1, className.size() - 2);
     fullName.append("::");
     fullName.append(fctName);
-    Outputter::get() << ">> " << fullName << " " << getEntryMsg(args...)
+    *Outputter::get() << ">> " << fullName << " " << getEntryMsg(args...)
                      << "\n";
   }
 
   ~FunctionLoggerBase() {
-    Outputter::get() << "<< " << fullName << " " << exitMsg << "\n";
+    *Outputter::get() << "<< " << fullName << " " << exitMsg << "\n";
   }
 
 protected:
